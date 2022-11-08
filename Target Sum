@@ -1,0 +1,82 @@
+/*
+Problem Statement :->>>
+
+
+
+You are given an integer array nums and an integer target.
+
+You want to build an expression out of nums by adding one of the symbols '+' and '-' before each integer in nums and then concatenate all the integers.
+
+For example, if nums = [2, 1], you can add a '+' before 2 and a '-' before 1 and concatenate them to build the expression "+2-1".
+Return the number of different expressions that you can build, which evaluates to target.
+
+
+
+
+
+Input: 
+    nums = [1,1,1,1,1], target = 3
+Output:
+     5
+Explanation: There are 5 ways to assign symbols to make the sum of nums be target 3.
+-1 + 1 + 1 + 1 + 1 = 3
++1 - 1 + 1 + 1 + 1 = 3
++1 + 1 - 1 + 1 + 1 = 3
++1 + 1 + 1 - 1 + 1 = 3
++1 + 1 + 1 + 1 - 1 = 3
+
+
+*/
+
+
+
+int findTargetSumWays(vector<int>& nums, int target) {
+        int n = nums.size();
+        int sum=0;
+        for(int i=0;i<n;i++) sum+=nums[i];
+        if(target > sum) return 0;
+        if((sum+target)%2==1) return 0;
+        long int final = (sum + target)/2;
+        if(final<0) return 0;
+        // vector<vector<int>> dp(nums.size()+1 , vector<int>(target+1 , -1));
+        int dp[n+10][final+10];
+        for(int i=0;i<=final;i++){
+           dp[0][i] = 0;
+        }
+        dp[0][0] = 1;
+        for(int i=1;i<=n;i++){
+           if(nums[i-1]==0)
+            dp[i][0] = dp[i-1][0] *2;
+            else
+                dp[i][0] =dp[i-1][0] * 1;
+        }
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=final;j++){
+                if(nums[i-1] <= j){
+                    dp[i][j] = dp[i-1][j-nums[i-1]] + dp[i-1][j] ;
+                }else{
+                    dp[i][j] = dp[i-1][j];
+                }
+            }
+        }
+        
+        
+//         for(int i=0;i<=n;i++){
+//             for(int j=0;j<=final;j++)
+//                 cout<<dp[i][j]<<" ";
+//          cout<<endl;
+            
+//         }
+        
+        
+        return dp[n][final];
+    }
+
+
+    int main(){
+        int n,target;
+        cin>>n>>target;
+        vector<int> arr(n);
+        for(int i=0;i<n;i++) cin>>arr[i];
+        cout<<findTargetSumWays(arr , target);
+    }
