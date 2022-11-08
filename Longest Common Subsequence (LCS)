@@ -1,0 +1,97 @@
+/*
+
+Given two strings text1 and text2, return the length of their longest common subsequence. 
+If there is no common subsequence, return 0.
+
+A subsequence of a string is a new string generated from the original string 
+with some characters (can be none) deleted without changing the relative order of the remaining characters.
+
+For example, "ace" is a subsequence of "abcde".
+A common subsequence of two strings is a subsequence that is common to both strings.
+
+
+Input: text1 = "abcde", text2 = "ace" 
+Output: 3  
+Explanation: The longest common subsequence is "ace" and its length is 3.
+
+
+Input: text1 = "abc", text2 = "abc"
+Output: 3
+Explanation: The longest common subsequence is "abc" and its length is 3.
+
+Input: text1 = "abc", text2 = "def"
+Output: 0
+Explanation: There is no such common subsequence, so the result is 0.
+
+
+*/
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+int countMax = INT_MIN;
+
+/*
+Recursive Approach 
+--------------------
+
+
+int longestCommonSubsequence(string s1 , string s2 , int i , int j , int count){
+
+
+     if(i==s1.size() || j==s2.size()){
+     	countMax = max(count , countMax);
+     	return countMax;
+     }
+
+
+     if(s1[i] == s2[j])
+	    return longestCommonSubsequence(s1 , s2 , i+1 , j+1 , count+1);
+
+	else
+		return max(longestCommonSubsequence(s1 , s2 , i+1 , j , count) , longestCommonSubsequence(s1 , s2 , i , j+1 , count));
+
+}
+
+int main(){
+	string s1 , s2;
+	cin>>s1>>s2;
+	cout<<longestCommonSubsequence(s1 , s2 , 0 , 0 , 0);
+}
+
+
+*/
+
+
+
+//   Dynamic Approach
+
+int longestCommonSubsequence(string str1 , string str2)
+{
+
+      int n= str1.size();
+      int m = str2.size();
+      int dp[n+1][m+1];
+     for(int i=0;i<=n;i++){
+         for(int j=0;j<=m;j++)
+             dp[i][j] = 0;
+     }        
+
+     for(int i=1;i<=n;i++){
+         for(int j=1;j<=m;j++){
+             if(str1[i-1] == str2[j-1])
+                 dp[i][j] = dp[i-1][j-1] + 1;
+             else
+                 dp[i][j] = max(dp[i-1][j] , dp[i][j-1]);
+         }
+     }
+        return dp[n][m];
+}
+
+
+int main(){
+	string s,s1;
+	cin>>s>>s1;
+	cout<<longestCommonSubsequence(s , s1);
+}
