@@ -1,0 +1,86 @@
+/*
+
+Input :     "acbcf"
+            "abcdaf"
+
+
+Output :   "acbcdaf"
+
+
+we have to find a string where both strings exists as subsequence
+and It should be minimum....
+that's why name is shortest common supersequence....
+
+
+*/
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void shortestCommonSupersequence(string s , string s1){
+   int n = s.size();
+   int m = s1.size();
+   vector<vector<int>> dp(n+1 , vector<int> (m+1 , 0));
+   for(int i=1;i<=n;i++){
+      for(int j=1;j<=m;j++){
+         if(s[i-1]==s1[j-1])
+            dp[i][j] = dp[i-1][j-1]+1;
+         else
+            dp[i][j] = max(dp[i-1][j] , dp[i][j-1]);
+      }
+   }
+
+
+   for(int i=0;i<=n;i++){
+      for(int j=0;j<=m;j++){
+         cout<<dp[i][j]<<" ";
+      }
+      cout<<endl;
+   }
+
+   int i = n , j = m;
+   string answer = "";
+   while(i>0 && j>0){
+      if(s[i-1]==s1[j-1]){
+         answer.push_back(s1[j-1]);
+         // cout<<s1[j-1];
+         i--;
+         j--;
+      }
+      else{
+         if(dp[i-1][j] > dp[i][j-1]){
+            answer.push_back(s[i-1]);
+            // cout<<s[i-1];
+            i--;
+         }else{
+            answer.push_back(s1[j-1]);
+            // cout<<s1[j-1];
+            j--;
+         }
+      }
+   }
+
+   while(i>0){
+      answer.push_back(s[i-1]);
+      // cout<<s[i-1];
+      i--;
+   }
+
+   while(j>0){
+      answer.push_back(s1[j-1]);
+      // cout<<s1[j-1];
+      j--;
+   }
+   reverse(answer.begin() , answer.end());
+   cout<<answer<<endl;
+
+
+
+}
+int main(){
+   string s,s1;
+   cin>>s>>s1;
+   shortestCommonSupersequence(s , s1);
+}
