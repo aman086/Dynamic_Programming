@@ -1,0 +1,44 @@
+/*
+we have two strings
+and we have to find out the longest sequence which is repeating 2 times in given string.
+
+
+Input : AABEBCDD
+
+Output : ABD
+
+which is repeating 2 times in given string and also at another indexes.....
+
+
+LCS(AABEBCDD , AABEBCDD)
+
+but keep in mind that (i != j) because we want different different Indices 
+so that 'E' and 'C' can be discarded.....
+
+*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int LongestCommonSubsequence(string s , string s1){
+
+    int n = s.size();
+   int m = s1.size();
+   vector<vector<int>> dp(n+1 , vector<int> (m+1 , 0));
+   for(int i=1;i<=n;i++){
+      for(int j=1;j<=m;j++){
+         if(s[i-1]==s1[j-1] && i!=j)
+            dp[i][j] = dp[i-1][j-1]+1;
+         else
+            dp[i][j] = max(dp[i-1][j] , dp[i][j-1]);
+      }
+   }
+   return dp[n][m];
+}
+
+int main(){
+    string s1;
+    cin>>s1;
+    cout<<LongestRepeatingSubsequence(s1);
+   
+}
